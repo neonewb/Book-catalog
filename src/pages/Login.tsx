@@ -1,9 +1,7 @@
 import { Box, Grid, Paper, TextField, Typography } from '@material-ui/core'
 import React, { FC } from 'react'
 
-type Props = {}
-
-export const Login: FC<Props> = () => {
+export const Login: FC = () => {
   return (
     <Box m={1}>
       <Paper elevation={4}>

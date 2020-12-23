@@ -6,9 +6,7 @@ import VpnKeyRoundedIcon from '@material-ui/icons/VpnKeyRounded'
 import LockRoundedIcon from '@material-ui/icons/LockRounded'
 import { Link } from 'react-router-dom'
 
-type Props = {}
-
-export const Navbar: FC<Props> = () => {
+export const Navbar: FC = () => {
   return (
     <AppBar color='primary' position='static'>
       <Toolbar>

@@ -1,67 +1,86 @@
 import { createEffect, createEvent, createStore } from 'effector'
-import { db } from '../configs/firebase.config'
+import { db } from '../configs/init-firebase'
 
-export const booksStore = createStore<Book[]>([
-  {
-    title: 'Гарри Поттер',
-    author: 'Дж. К. Роулинг',
-    year: 1997,
-    isbn: '978-0-8262-1549-9',
-    id: 'uiojklm',
-  },
-  {
-    title: '1984',
-    author: 'Джордж Оруэлл',
-    year: 1948,
-    isbn: '	978-5-17-080115',
-    id: 'qweasdzxc',
-  },
-  {
-    title: 'Властелин колец',
-    author: 'Дж. Р. Р. Толкин',
-    year: 1954,
-    isbn: '978-3-16-148410-0',
-    id: 'rtyfghvbn',
-  },
-])
+export const booksStore = createStore<Book[]>([])
 
-export const update = createEvent<Book>()
+export const updateBookEvent = createEvent<Book>()
 
-const updateBooks = (state: Book[], data: Book) => {
-  state.push(data)
-  return [...state]
+const updateBookState = (state: Book[], book: Book) => {
+  if (state.some((b) => b.id === book.id)) {
+    return state.map((b) =>
+      b.id === book.id
+        ? {
+            ...book,
+          }
+        : b
+    )
+  } else {
+    state.push(book)
+    return [...state]
+  }
 }
 
-booksStore.on(update, updateBooks)
+booksStore.on(updateBookEvent, updateBookState)
 
-export const getBooksFx = createEffect()
-
-export const getBooks = async () => {
-  const res = await db.collection("books").get()
-  res.forEach(function (doc: any) {
-    console.log(doc)
-  })
-
-  return res
+export const fetchBooks = () => {
+  try {
+    const unsubscribeBooks = db
+      .collection('books')
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          //@ts-ignore
+          updateBookEvent(doc.data())
+        })
+      })
+  } catch (error) {
+    console.error(error)
+  }
 }
 
-getBooksFx.use(getBooks)
+export const fetchBooksFx = createEffect()
+fetchBooksFx.use(fetchBooks)
 
-// // subscribe to effect call
-getBooksFx.watch(params => {
-  console.log(params)
+export const addBook = (book: Book) => {
+  db.collection('books').doc(book.id).set(book)
+}
+
+export const addBookFx = createEffect()
+//@ts-ignore
+addBookFx.use(addBook)
+addBookFx.fail.watch(({ error, params }) => {
+  console.error(error)
 })
 
-// // subscribe to promise resolve
-getBooksFx.done.watch(({result, params}) => {
-  console.log(params)
-  console.log(result) // resolved value
+export const updateBook = (book: Book) => {
+  db.collection('books').doc(book.id).update(book)
+}
+
+export const updateBookFx = createEffect()
+//@ts-ignore
+updateBookFx.use(updateBook)
+updateBookFx.fail.watch(({ error, params }) => {
+  console.error(error)
 })
 
-// // subscribe to promise reject (or throw)
-getBooksFx.fail.watch(({error, params}) => {
-  console.error(params)
-  console.error(error) // rejected value
+export const deleteBook = (id: Book['id']) => {
+  db.collection('books').doc(id).delete()
+}
+
+export const deleteBookFx = createEffect()
+//@ts-ignore
+deleteBookFx.use(deleteBook)
+deleteBookFx.fail.watch(({ error, params }) => {
+  console.error(error)
 })
 
-// call effect with your params
+export const deleteBookEvent = createEvent<{ id: string }>()
+
+const deleteBookFromState = (state: Book[], id: string) => {
+  console.log('deleteBookFromState')
+
+  return state.filter((b) => b.id !== id)
+}
+
+//@ts-ignore
+booksStore.on(deleteBookEvent, deleteBookFromState)
