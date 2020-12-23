@@ -3,7 +3,7 @@ import MUIDataTable, { MUIDataTableOptions } from 'mui-datatables'
 import { Box, makeStyles } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import { useStore } from 'effector-react'
-import { booksStore, deleteBookEvent, deleteBookFx } from '../effector/store'
+import { booksStore, deleteBookFx } from '../effector/store'
 
 const useStyles = makeStyles({
   pointer: {
@@ -59,8 +59,6 @@ export const BooksTable: FC = () => {
     onRowsDelete: (rowsDeleted) => {
       rowsDeleted.data.forEach((e) => {
         deleteBookFx(data[e.dataIndex].id)
-        //@ts-ignore
-        deleteBookEvent(data[e.dataIndex].id)
       })
     },
     draggableColumns: {

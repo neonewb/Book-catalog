@@ -10,7 +10,7 @@ import { useStore } from 'effector-react'
 import React, { FC } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
-import { booksStore, updateBookEvent, updateBookFx } from '../effector/store'
+import { booksStore, updateBookFx } from '../effector/store'
 
 export const EditBook: FC = () => {
   const books = useStore(booksStore)
@@ -21,7 +21,6 @@ export const EditBook: FC = () => {
 
   const onSubmit = (data: Book) => {
     data.id = params.id
-    updateBookEvent(data)
     updateBookFx(data)
   }
 

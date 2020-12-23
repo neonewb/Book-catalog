@@ -23,23 +23,21 @@ const updateBookState = (state: Book[], book: Book) => {
 booksStore.on(updateBookEvent, updateBookState)
 
 export const fetchBooks = () => {
-  try {
-    const unsubscribeBooks = db
-      .collection('books')
-      .get()
-      .then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {
-          //@ts-ignore
-          updateBookEvent(doc.data())
-        })
+  db.collection('books')
+    .get()
+    .then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        //@ts-ignore
+        updateBookEvent(doc.data())
       })
-  } catch (error) {
-    console.error(error)
-  }
+    })
 }
 
 export const fetchBooksFx = createEffect()
 fetchBooksFx.use(fetchBooks)
+fetchBooksFx.fail.watch(({ error, params }) => {
+  console.error(error)
+})
 
 export const addBook = (book: Book) => {
   db.collection('books').doc(book.id).set(book)
@@ -48,6 +46,10 @@ export const addBook = (book: Book) => {
 export const addBookFx = createEffect()
 //@ts-ignore
 addBookFx.use(addBook)
+addBookFx.done.watch(({ result, params }) => {
+  //@ts-ignore
+  updateBookEvent(params)
+})
 addBookFx.fail.watch(({ error, params }) => {
   console.error(error)
 })
@@ -59,6 +61,10 @@ export const updateBook = (book: Book) => {
 export const updateBookFx = createEffect()
 //@ts-ignore
 updateBookFx.use(updateBook)
+updateBookFx.done.watch(({ result, params }) => {
+  //@ts-ignore
+  updateBookEvent(params)
+})
 updateBookFx.fail.watch(({ error, params }) => {
   console.error(error)
 })
@@ -70,6 +76,10 @@ export const deleteBook = (id: Book['id']) => {
 export const deleteBookFx = createEffect()
 //@ts-ignore
 deleteBookFx.use(deleteBook)
+deleteBookFx.done.watch(({ result, params }) => {
+  //@ts-ignore
+  deleteBookEvent(params)
+})
 deleteBookFx.fail.watch(({ error, params }) => {
   console.error(error)
 })
