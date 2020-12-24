@@ -1,5 +1,5 @@
-Simple react app: book catalog with authentication
-https://neobook-catalog.web.app/
+Simple react app: book catalog with authentication\
+https://neobook-catalog.web.app
 
 # Getting Started with Create React App
 
