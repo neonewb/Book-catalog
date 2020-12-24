@@ -14,6 +14,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import GoogleButton from '../utils/google/GoogleButton'
 import { signInFX } from '../effector/auth'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -23,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 400,
     minWidth: 300,
   },
+  form: {
+    marginBottom: theme.spacing(1.5)
+  }
 }))
 
 export const Login: FC = () => {
@@ -42,7 +46,7 @@ export const Login: FC = () => {
       <Box marginBottom={1}>
         <Typography variant='h6'>Вход</Typography>
       </Box>
-      <form noValidate onSubmit={handleSubmit(onSubmit)}>
+      <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
         <Grid container direction='column' spacing={2}>
           <Grid item>
             <TextField
@@ -51,7 +55,7 @@ export const Login: FC = () => {
               inputRef={register}
               error={!!errors.email}
               helperText={errors.email?.message}
-              label='Логин'
+              label='Email'
               name='email'
               type='email'
               id='email'
@@ -74,9 +78,24 @@ export const Login: FC = () => {
           <Button fullWidth size='large' color='primary' type='submit'>
             Войти
           </Button>
-          <GoogleButton />
         </Grid>
       </form>
+
+      <Grid container direction='column' spacing={1}>
+        <Grid item>
+          <GoogleButton />
+        </Grid>
+        <Grid item>
+          <Button
+            component={Link}
+            to='/resetpass'
+            fullWidth
+            size='large'
+            type='submit'>
+            Забыли пароль?
+          </Button>
+        </Grid>
+      </Grid>
     </Paper>
   )
 }

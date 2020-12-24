@@ -27,6 +27,13 @@ export const schemaSI = yup.object().shape({
     .min(6, 'минимальная длинна пароля 6 символов'),
 })
 
+export const emailSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email('Введите корректный email')
+    .required('Email обязателен'),
+})
+
 export const bookSchema = yup.object().shape({
   title: yup.string().required('Название обязательно'),
   author: yup.string().required('Автор обязателен'),

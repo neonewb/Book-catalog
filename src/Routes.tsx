@@ -6,6 +6,7 @@ import { AddBook } from './pages/AddBook'
 import { EditBook } from './pages/EditBook'
 import { Home } from './pages/Home'
 import { Login } from './pages/Login'
+import { ResetPass } from './pages/ResetPass'
 import { Signup } from './pages/Signup'
 
 export const Routes: FC = () => {
@@ -22,6 +23,7 @@ export const Routes: FC = () => {
         <>
           <Route path='/login' component={Login} />
           <Route path='/signup' component={Signup} />
+          <Route path='/resetpass' component={ResetPass} />
         </>
       )}
     </Switch>

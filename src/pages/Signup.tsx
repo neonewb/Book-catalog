@@ -51,7 +51,7 @@ export const Signup: FC = () => {
               inputRef={register}
               error={!!errors.email}
               helperText={errors.email?.message}
-              label='Логин'
+              label='Email'
               name='email'
               type='email'
               id='email'
@@ -84,12 +84,15 @@ export const Signup: FC = () => {
               autoComplete='current-password'
             />
           </Grid>
+
           <Button fullWidth size='large' color='primary' type='submit'>
             Зарегистрироваться
           </Button>
-          <GoogleButton />
         </Grid>
       </form>
+      <Box marginTop={2}>
+        <GoogleButton />
+      </Box>
     </Paper>
   )
 }

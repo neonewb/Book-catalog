@@ -92,3 +92,19 @@ signOutFX.fail.watch(({ error, params }) => {
   console.error('Error:', error)
   showSnack(`Ошибка: ${error.message}`, 'error')
 })
+
+// Reset Password
+export const resetPassFX = createEffect(
+  async ({ email }: { email: string }) => {
+    const response = await auth.sendPasswordResetEmail(email)
+    return response
+  }
+)
+
+resetPassFX.done.watch(({ result, params }) => {
+  showSnack('Письмо отправлено', 'info')
+})
+resetPassFX.fail.watch(({ error, params }) => {
+  console.error('Error:', error)
+  showSnack(`Ошибка: ${error.message}`, 'error')
+})
