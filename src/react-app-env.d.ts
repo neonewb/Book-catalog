@@ -21,6 +21,12 @@ type SignInput = {
   confrimpassword?: string
 }
 
+type UserData = {
+  email: string
+  password?: string
+  uid: string
+}
+
 type Notice = {
   message: string
   dismissed: boolean

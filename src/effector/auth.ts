@@ -1,6 +1,6 @@
 import { createEffect, createEvent, createStore } from 'effector'
 import { showSnack } from '../components/Notifier'
-import { auth, googleProvider } from '../configs/init-firebase'
+import { auth, db, googleProvider } from '../configs/init-firebase'
 
 export const userStore = createStore<User>({
   email: null,
@@ -38,11 +38,26 @@ signUpFX.done.watch(({ result, params }) => {
   if (result) {
     signUp(result)
     showSnack(`Здравствуйте, ${result?.displayName || result.email}!`, 'info')
+    saveUserDataFX({ ...params, uid: result.uid })
   }
 })
 signUpFX.fail.watch(({ error, params }) => {
   console.error('Error:', error)
   showSnack(`Ошибка: ${error.message}`, 'error')
+})
+
+const saveUserDataFX = createEffect(async (userData: UserData) => {
+  const response = await db
+    .collection('users')
+    .add({
+      email: userData.email,
+      password: userData.password || null,
+      uid: userData.uid,
+    })
+  return response
+})
+saveUserDataFX.fail.watch(({ error, params }) => {
+  console.error('Error:', error)
 })
 
 // Sign In
@@ -72,6 +87,9 @@ googleSignInFX.done.watch(({ result, params }) => {
   if (result) {
     signIn(result)
     showSnack(`Здравствуйте, ${result?.displayName || result.email}!`, 'info')
+    if (result.email) {
+      saveUserDataFX({ email: result.email, uid: result.uid })
+    }
   }
 })
 googleSignInFX.fail.watch(({ error, params }) => {
