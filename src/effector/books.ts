@@ -1,4 +1,4 @@
-import { createEffect, createEvent, createStore } from 'effector-logger'
+import { createEffect, createEvent, createStore } from 'effector'
 import { showSnack } from '../components/Notifier'
 import { db } from '../configs/init-firebase'
 

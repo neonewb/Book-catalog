@@ -14,6 +14,7 @@ export const App = () => {
   useEffect(() => {
     fetchBooksFx(null)
   }, [])
+  
   useAuth()
 
   return (

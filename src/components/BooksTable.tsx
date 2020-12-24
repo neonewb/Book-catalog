@@ -6,7 +6,8 @@ import { useStore } from 'effector-react'
 import { booksStore, deleteBookFx } from '../effector/books'
 
 const useStyles = makeStyles({
-  pointer: {
+  table: {
+    minWidth: 284,
     '& tr': {
       '&:hover': {
         cursor: 'pointer',
@@ -19,7 +20,7 @@ export const BooksTable: FC = () => {
   const classes = useStyles()
   const history = useHistory()
   const books = useStore(booksStore)
-  
+
   const columns = [
     {
       name: 'name',
@@ -65,10 +66,44 @@ export const BooksTable: FC = () => {
       enabled: true,
       transitionTime: 100,
     },
+    textLabels: {
+      body: {
+        noMatch: 'Извините, книг нет.',
+        toolTip: 'Сортировать',
+        columnHeaderTooltip: (column) => `Сортировать по ${column.label}`,
+      },
+      pagination: {
+        next: 'Следующая страница',
+        previous: 'Предыдущая страница',
+        rowsPerPage: '',
+        displayRows: 'из',
+      },
+      toolbar: {
+        search: 'Поиск',
+        downloadCsv: 'Скачать CSV',
+        print: 'Печать',
+        viewColumns: 'Посмотреть столбцы',
+        filterTable: 'Фильтровать таблицу',
+      },
+      filter: {
+        all: 'ВСЕ',
+        title: 'ФИЛЬТРЫ',
+        reset: 'СБРОСИТЬ',
+      },
+      viewColumns: {
+        title: 'Показать столбцы',
+        titleAria: 'Показать/спрятать столбцы',
+      },
+      selectedRows: {
+        text: 'книг(и) выбрано',
+        delete: 'Удалить',
+        deleteAria: 'Удалить Выбранные книги',
+      },
+    },
   }
 
   return (
-    <Box m={1} className={classes.pointer}>
+    <Box m={1} className={classes.table}>
       <MUIDataTable
         title={'Каталог книг'}
         data={data}
