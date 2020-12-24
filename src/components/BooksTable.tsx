@@ -3,7 +3,7 @@ import MUIDataTable, { MUIDataTableOptions } from 'mui-datatables'
 import { Box, makeStyles } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import { useStore } from 'effector-react'
-import { booksStore, deleteBookFx } from '../effector/store'
+import { booksStore, deleteBookFx } from '../effector/books'
 
 const useStyles = makeStyles({
   pointer: {
@@ -23,19 +23,19 @@ export const BooksTable: FC = () => {
   const columns = [
     {
       name: 'name',
-      label: 'Название',
+      label: '📚 Название',
     },
     {
       name: 'author',
-      label: 'Автор',
+      label: '🖊️ Автор',
     },
     {
       name: 'year',
-      label: 'Год',
+      label: '🗓️ Год',
     },
     {
       name: 'isbn',
-      label: 'ISBN',
+      label: '#️⃣ ISBN',
     },
   ]
 

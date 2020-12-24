@@ -1,4 +1,5 @@
-import { createEffect, createEvent, createStore } from 'effector'
+import { createEffect, createEvent, createStore } from 'effector-logger'
+import { showSnack } from '../components/Notifier'
 import { db } from '../configs/init-firebase'
 
 export const booksStore = createStore<Book[]>([])
@@ -22,6 +23,7 @@ const updateBookState = (state: Book[], book: Book) => {
 
 booksStore.on(updateBookEvent, updateBookState)
 
+// Fetch books
 export const fetchBooks = () => {
   db.collection('books')
     .get()
@@ -35,62 +37,53 @@ export const fetchBooks = () => {
 
 export const fetchBooksFx = createEffect()
 fetchBooksFx.use(fetchBooks)
-fetchBooksFx.fail.watch(({ error, params }) => {
+fetchBooksFx.fail.watch(({ error }) => {
   console.error(error)
 })
 
-export const addBook = (book: Book) => {
+// Add book
+export const addBookFx = createEffect<Book, void, Error>((book) => {
   db.collection('books').doc(book.id).set(book)
-}
-
-export const addBookFx = createEffect()
-//@ts-ignore
-addBookFx.use(addBook)
+})
 addBookFx.done.watch(({ result, params }) => {
-  //@ts-ignore
   updateBookEvent(params)
+  showSnack('Книга добавлена', 'success')
 })
 addBookFx.fail.watch(({ error, params }) => {
   console.error(error)
-})
+  showSnack(`Ошибка: ${error.message}`, 'error')})
 
-export const updateBook = (book: Book) => {
+// Update book
+export const updateBookFx = createEffect<Book, void, Error>((book) => {
   db.collection('books').doc(book.id).update(book)
-}
-
-export const updateBookFx = createEffect()
-//@ts-ignore
-updateBookFx.use(updateBook)
+})
 updateBookFx.done.watch(({ result, params }) => {
-  //@ts-ignore
   updateBookEvent(params)
+  showSnack('Книга изменена', 'info')
 })
 updateBookFx.fail.watch(({ error, params }) => {
   console.error(error)
-})
+  showSnack(`Ошибка: ${error.message}`, 'error')})
 
-export const deleteBook = (id: Book['id']) => {
-  db.collection('books').doc(id).delete()
-}
-
-export const deleteBookFx = createEffect()
-//@ts-ignore
-deleteBookFx.use(deleteBook)
-deleteBookFx.done.watch(({ result, params }) => {
-  //@ts-ignore
-  deleteBookEvent(params)
-})
-deleteBookFx.fail.watch(({ error, params }) => {
-  console.error(error)
-})
-
-export const deleteBookEvent = createEvent<{ id: string }>()
+// Delete book from state
+export const deleteBookEvent = createEvent<Book['id']>()
 
 const deleteBookFromState = (state: Book[], id: string) => {
-  console.log('deleteBookFromState')
-
   return state.filter((b) => b.id !== id)
 }
 
-//@ts-ignore
 booksStore.on(deleteBookEvent, deleteBookFromState)
+
+// Delete book
+export const deleteBookFx = createEffect<Book['id'], void, Error>((id) => {
+  db.collection('books').doc(id).delete()
+})
+
+deleteBookFx.done.watch(({ result, params }) => {
+  deleteBookEvent(params)
+  showSnack('Книга удалена', 'info')
+})
+deleteBookFx.fail.watch(({ error, params }) => {
+  console.error(error)
+  showSnack(`Ошибка: ${error.message}`, 'error')
+})
