@@ -1,7 +1,7 @@
 Simple react app: book catalog with authentication\
 https://neobook-catalog.web.app
 
-Stack:\
+###Stack:\
   Typescript\
   React\
   React Router\
@@ -10,7 +10,7 @@ Stack:\
   Firebase\
   React hook form\
   Yup\
-  Notistack\
+  Notistack
 
 # Getting Started with Create React App
 
