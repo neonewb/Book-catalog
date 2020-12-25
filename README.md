@@ -1,7 +1,7 @@
 Simple react app: book catalog with authentication\
 https://neobook-catalog.web.app
 
-### Stack:\
+### Stack:
   Typescript\
   React\
   React Router\
