@@ -3,7 +3,6 @@ import {
   Button,
   Grid,
   IconButton,
-  makeStyles,
   Toolbar,
   Typography,
   useMediaQuery,

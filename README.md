@@ -1,6 +1,17 @@
 Simple react app: book catalog with authentication\
 https://neobook-catalog.web.app
 
+Stack:\
+  Typescript\
+  React\
+  React Router\
+  Effector\
+  Material UI\
+  Firebase\
+  React hook form\
+  Yup\
+  Notistack\
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
